@@ -11,7 +11,7 @@
 	)
 
 /datum/surgery/stomach_pump/can_start(mob/user, mob/living/carbon/target)
-	var/obj/item/organ/internal/stomach/target_stomach = target.getorganslot(ORGAN_SLOT_STOMACH)
+	var/obj/item/organ/internal/stomach/target_stomach = target.get_organ_slot(ORGAN_SLOT_STOMACH)
 	if(HAS_TRAIT(target, TRAIT_HUSK))
 		return FALSE
 	if(!target_stomach)
@@ -46,7 +46,7 @@
 			span_notice("[user] forces [target_human] to vomit, cleansing their stomach of some chemicals!"),
 			span_notice("[user] forces [target_human] to vomit!"),
 		)
-		target_human.vomit(20, FALSE, TRUE, 1, TRUE, FALSE, purge_ratio = 0.67) //higher purge ratio than regular vomiting
+		target_human.vomit((MOB_VOMIT_MESSAGE | MOB_VOMIT_STUN), lost_nutrition = 20, purge_ratio = 0.67) //higher purge ratio than regular vomiting
 	return ..()
 
 /datum/surgery_step/stomach_pump/failure(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -55,7 +55,7 @@
 		display_results(
 			user,
 			target,
-			span_warning("You screw up, brusing [target_human]'s chest!"),
+			span_warning("You screw up, bruising [target_human]'s chest!"),
 			span_warning("[user] screws up, brusing [target_human]'s chest!"),
 			span_warning("[user] screws up!"),
 		)

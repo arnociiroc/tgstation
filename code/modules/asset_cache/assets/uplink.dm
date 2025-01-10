@@ -9,7 +9,7 @@
 	var/list/items = list()
 	for(var/datum/uplink_category/category as anything in subtypesof(/datum/uplink_category))
 		categories += category
-	categories = sortTim(categories, GLOBAL_PROC_REF(cmp_uplink_category_desc))
+	sortTim(categories, GLOBAL_PROC_REF(cmp_uplink_category_desc))
 
 	var/list/new_categories = list()
 	for(var/datum/uplink_category/category as anything in categories)
@@ -33,6 +33,7 @@
 				"restricted_species" = item.restricted_species,
 				"progression_minimum" = item.progression_minimum,
 				"cost_override_string" = item.cost_override_string,
+				"lock_other_purchases" = item.lock_other_purchases
 			))
 		}
 		SStraitor.uplink_items += item

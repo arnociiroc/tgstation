@@ -19,6 +19,10 @@
 	start_sound = list('sound/items/taperecorder/taperecorder_hiss_start.ogg' = 1)
 	volume = 10
 
+/datum/looping_sound/heartbeat
+	mid_sounds = list('sound/effects/singlebeat.ogg' = 1)
+	mid_length = 1 SECONDS
+
 /datum/looping_sound/trapped_machine_beep
 	mid_sounds = list('sound/machines/beep.ogg' = 1)
 	mid_length = 10 SECONDS
@@ -36,3 +40,11 @@
 	end_volume = 35
 	volume = 40
 	ignore_walls = FALSE
+
+/datum/looping_sound/beesmoke
+	mid_sounds = list('sound/weapons/beesmoke.ogg' = 1)
+	volume = 5
+
+/datum/looping_sound/zipline
+	mid_sounds = list('sound/weapons/zipline_mid.ogg' = 1)
+	volume = 5

@@ -8,11 +8,16 @@
 		/// Takes lmb_text and rmb_text.
 		list/screentip_texts
 
+		/// A custom callback to determine whether a user's clicks will be redirected or not (mob/user)
+		datum/callback/interact_check
+
 		turf/current_turf
+
 
 /datum/component/redirect_attack_hand_from_turf/Initialize(
 	adjust_for_pixel_shift = TRUE,
 	list/screentip_texts = null,
+	datum/callback/interact_check = null
 )
 	. = ..()
 
@@ -21,11 +26,12 @@
 
 	src.adjust_for_pixel_shift = adjust_for_pixel_shift
 	src.screentip_texts = screentip_texts
+	src.interact_check = interact_check
 
 	RegisterSignal(parent, COMSIG_MOVABLE_MOVED, PROC_REF(on_moved))
 	connect_to_new_turf()
 
-/datum/component/redirect_attack_hand_from_turf/Destroy(force, silent)
+/datum/component/redirect_attack_hand_from_turf/Destroy(force)
 	disconnect_from_old_turf()
 	return ..()
 
@@ -84,6 +90,8 @@
 		COMSIG_ATOM_ATTACK_HAND,
 		COMSIG_ATOM_ATTACK_HAND_SECONDARY,
 		COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM,
+		COMSIG_ATOM_ATTACK_ROBOT,
+		COMSIG_ATOM_ATTACK_ROBOT_SECONDARY,
 	))
 
 /datum/component/redirect_attack_hand_from_turf/proc/on_attack_hand(turf/source, mob/user, list/modifiers)
@@ -92,6 +100,9 @@
 
 	var/atom/movable/movable_parent = parent
 	if (!movable_parent.can_interact(user))
+		return NONE
+	
+	if (!isnull(interact_check) && !interact_check.Invoke(user))
 		return NONE
 
 	INVOKE_ASYNC(user, TYPE_PROC_REF(/mob, UnarmedAttack), parent, proximity_flag = TRUE, modifiers = modifiers)
@@ -111,6 +122,9 @@
 		return NONE
 
 	if (!isnull(held_item))
+		return NONE
+	
+	if (!isnull(interact_check) && !interact_check.Invoke(user))
 		return NONE
 
 	if (!isnull(screentip_texts["lmb_text"]))
